@@ -82,7 +82,7 @@ resource "azurerm_function_app" "example" {
 #KeyVault
 
 resource "azurerm_key_vault" "KeyVault" {
-  name                        = "testvault"
+  name                        = "Cm-tf-test-testvault"
   location                    = "${azurerm_resource_group.CM-Terraform-Test.location}"
   resource_group_name         = "${azurerm_resource_group.CM-Terraform-Test.name}"
   enabled_for_disk_encryption = true
