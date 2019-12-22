@@ -23,7 +23,7 @@ resource "azurerm_resource_group" "Storage" {
 }
 
 resource "azurerm_storage_account" "example" {
-  name                     = "storageaccountname"
+  name                     = "cm-mastervijay-sg-acc"
   resource_group_name      = "${azurerm_resource_group.Storage.name}"
   location                 = "${azurerm_resource_group.Storage.location}"
   account_tier             = "Standard"
