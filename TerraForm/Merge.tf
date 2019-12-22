@@ -34,7 +34,7 @@ resource "azurerm_app_service_plan" "example" {
 #StorageAcccoun
 
 resource "azurerm_storage_account" "Storage" {
-  name                     = "CM-tr-storageacc"
+  name                     = "cmtrstorageaccqwcx"
   resource_group_name      = "${azurerm_resource_group.CM-Terraform-Test.name}"
   location                 = "${azurerm_resource_group.CM-Terraform-Test.location}"
   account_tier             = "Standard"
