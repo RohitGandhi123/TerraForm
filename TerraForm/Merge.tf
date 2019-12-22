@@ -31,17 +31,12 @@ resource "azurerm_app_service_plan" "example" {
   }
 }
 
-#StorageAcccount
-
-resource "azurerm_resource_group" "Storage" {
-  name     = "example-resourcescvgfhnbjy"
-  location = "West Europe"
-}
+#StorageAcccoun
 
 resource "azurerm_storage_account" "Storage" {
-  name                     = "storageaccountname"
-  resource_group_name      = "${azurerm_resource_group.Storage.name}"
-  location                 = "${azurerm_resource_group.Storage.location}"
+  name                     = "CM-tr-storageacc"
+  resource_group_name      = "${azurerm_resource_group.CM-Terraform-Test.name}"
+  location                 = "${azurerm_resource_group.CM-Terraform-Test.location}"
   account_tier             = "Standard"
   account_replication_type = "GRS"
 
