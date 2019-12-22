@@ -78,3 +78,39 @@ resource "azurerm_function_app" "example" {
   app_service_plan_id       = "${azurerm_app_service_plan.ASP.id}"
   storage_connection_string = "${azurerm_storage_account.Storage.primary_connection_string}"
 }
+
+#KeyVault
+
+resource "azurerm_key_vault" "KeyVault" {
+  name                        = "testvault"
+  location                    = "${azurerm_resource_group.CM-Terraform-Test.location}"
+  resource_group_name         = "${azurerm_resource_group.CM-Terraform-Test.name}"
+  enabled_for_disk_encryption = true
+  tenant_id                   = "0ae78c52-da35-4145-af80-af727883a5d1"
+
+  sku_name = "standard"
+  
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
+#RedisCache
+
+resource "azurerm_redis_cache" "RedisCache" {
+  name                = "CM-TF-Test-Rediscache"
+  location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
+  resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
+  capacity            = 2
+  family              = "C"
+  sku_name            = "Standard"
+  enable_non_ssl_port = false
+  minimum_tls_version = "1.2"
+
+  redis_configuration {}
+}
