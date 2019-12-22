@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "CM-Terraform-Test" {
   location = "West Europe"
 }
 
-resource "azurerm_application_insights" "example" {
+resource "azurerm_application_insights" "Ap" {
   name                = "tf-test-appinsights"
   location            = "West Europe"
   resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
@@ -11,11 +11,11 @@ resource "azurerm_application_insights" "example" {
 }
 
 output "instrumentation_key" {
-  value = "${azurerm_application_insights.example.instrumentation_key}"
+  value = "${azurerm_application_insights.Ap.instrumentation_key}"
 }
 
 output "app_id" {
-  value = "${azurerm_application_insights.example.app_id}"
+  value = "${azurerm_application_insights.Ap.app_id}"
 }
 
 #AppServicePlan
@@ -38,7 +38,7 @@ resource "azurerm_resource_group" "Storage" {
   location = "West Europe"
 }
 
-resource "azurerm_storage_account" "example" {
+resource "azurerm_storage_account" "Storage" {
   name                     = "storageaccountname"
   resource_group_name      = "${azurerm_resource_group.Storage.name}"
   location                 = "${azurerm_resource_group.Storage.location}"
@@ -52,7 +52,7 @@ resource "azurerm_storage_account" "example" {
 
 #FunctionApp
 
-resource "azurerm_app_service_plan" "example" {
+resource "azurerm_app_service_plan" "FunctionApp" {
   name                = "api-appserviceplan-pro"
   location            = azurerm_resource_group.CM-Terraform-Test.location
   resource_group_name = azurerm_resource_group.CM-Terraform-Test.name
