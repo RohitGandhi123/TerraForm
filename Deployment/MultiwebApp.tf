@@ -19,7 +19,7 @@ resource "azurerm_app_service_plan" "ASP" {
 resource "azurerm_app_service" "webApp" {
 
     count               = "${var.instance_count}"
-    name                = "CM-Tf-test-webapp"
+    name                = "${var.names}"
     location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
     resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
     app_service_plan_id = "${azurerm_app_service_plan.ASP.id}"
@@ -40,3 +40,4 @@ resource "azurerm_app_service" "webApp" {
     value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   }
 }
+
