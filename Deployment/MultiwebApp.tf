@@ -1,3 +1,21 @@
+resource "azurerm_resource_group" "CM-Terraform-Test" {
+  name     = "CM-Terraform-Test"
+  location = "West Europe"
+}
+
+#AppServicePlan
+
+resource "azurerm_app_service_plan" "ASP" {
+  name                = "api-appserviceplan-procmsds"
+  location            = azurerm_resource_group.CM-Terraform-Test.location
+  resource_group_name = azurerm_resource_group.CM-Terraform-Test.name
+
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
+}
+
 resource "azurerm_app_service" "webApp" {
 
     count               = "${var.instance_count}"
@@ -22,4 +40,3 @@ resource "azurerm_app_service" "webApp" {
     value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   }
 }
-
