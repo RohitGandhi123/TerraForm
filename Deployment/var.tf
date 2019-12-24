@@ -4,11 +4,11 @@ variable "instance_count" {
 }
 
 variable "instance_tags" {
-  type = "list"
+  type = list
   default = ["Terraform-1", "Terraform-2"]
 }
 
 variable "names" {
-  type = "list"
+  type = list
   default = ["CM-tf-Terraform-1", "CM-tf-Terraform-2"]
 }
