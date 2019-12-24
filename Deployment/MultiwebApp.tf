@@ -16,28 +16,16 @@ resource "azurerm_app_service_plan" "ASP" {
   }
 }
 
-resource "azurerm_app_service" "webApp" {
+resource "azurerm_provider_type" "terraformid" {
+    count               = 3
+    name                = "cosmeticname-count.index"
+    location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
+    resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
+    tags                = "${azurerm_resource_group.CM-Terraform-Test.tags}"
 
-    count               = ${var.instance_count}
-    name                = ${var.names}
-    location            = ${azurerm_resource_group.CM-Terraform-Test.location}
-    resource_group_name = ${azurerm_resource_group.CM-Terraform-Test.name}
-    app_service_plan_id = ${azurerm_app_service_plan.ASP.id}
-
-    tags = {
-    Name  = ${element(var.instance_tags, count.index)}
-    Batch = "5AM"
+    kind                = "Linux"
+    sku {
+        tier = "Free"
+        size = "F1"
     }
-
-  site_config {
-    dotnet_framework_version = "v4.0"
-    scm_type                 = "LocalGit"
-  }
-
-  connection_string {
-    name  = "Database"
-    type  = "SQLServer"
-    value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  }
 }
-
