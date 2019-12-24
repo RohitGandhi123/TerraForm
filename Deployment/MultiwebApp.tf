@@ -20,12 +20,12 @@ resource "azurerm_app_service" "webApp" {
 
     count               = ${var.instance_count}
     name                = ${var.names}
-    location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
-    resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
-    app_service_plan_id = "${azurerm_app_service_plan.ASP.id}"
+    location            = ${azurerm_resource_group.CM-Terraform-Test.location}
+    resource_group_name = ${azurerm_resource_group.CM-Terraform-Test.name}
+    app_service_plan_id = ${azurerm_app_service_plan.ASP.id}
 
     tags = {
-    Name  = "${element(var.instance_tags, count.index)}"
+    Name  = ${element(var.instance_tags, count.index)}
     Batch = "5AM"
     }
 
