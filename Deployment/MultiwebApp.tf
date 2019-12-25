@@ -4,10 +4,10 @@ resource "azurerm_resource_group" "webapps"{
 }
 
 locals {
-    webappsperloc   = 3
+    webappsperlocs   = 3
 }
 
-resource "azurerm_app_service_plan" "free" {
+resource "azurerm_app_service_plan" "ASP" {
     count               = "${length(var.webapplocs)}"
     name                = "plan-free-${var.webapplocs[count.index]}"
     location            = "${var.webapplocs[count.index]}"
