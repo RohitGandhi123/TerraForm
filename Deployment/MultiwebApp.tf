@@ -3,9 +3,9 @@ locals {
 }
 
 resource "azurerm_app_service_plan" "free" {
-    count               = "${length(var.webapplocs)}"
-    name                = "plan-free-${var.webapplocs[count.index]}"
-    location            = "${var.webapplocs[count.index]}"
+    count               = "${length(var.webappsperloc)}"
+    name                = "plan-free-${var.webappsperloc[count.index]}"
+    location            = "${var.webappsperloc[count.index]}"
     resource_group_name = "${azurerm_resource_group.webapps.name}"
     tags                = "${azurerm_resource_group.webapps.tags}"
 
@@ -18,9 +18,9 @@ resource "azurerm_app_service_plan" "free" {
 }
 
 resource "azurerm_app_service" "citadel" {
-    count               = "${ length(var.webapplocs) * local.webappsperloc }"
-    name                = "${format("webapp-%s-%02d-%s", random_string.webapprnd.result, count.index + 1, element(var.webapplocs, count.index))}"
-    location            = "${element(var.webapplocs, count.index)}"
+    count               = "${ length(var.webappsperloc) * local.webappsperloc }"
+    name                = "${format("webapp-%s-%02d-%s", random_string.webapprnd.result, count.index + 1, element(var.webappsperloc, count.index))}"
+    location            = "${element(var.webappsperloc, count.index)}"
     resource_group_name = "${azurerm_resource_group.webapps.name}"
     tags                = "${azurerm_resource_group.webapps.tags}"
 
