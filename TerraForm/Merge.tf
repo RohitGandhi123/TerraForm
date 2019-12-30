@@ -1,42 +1,25 @@
-resource "azurerm_resource_group" "CM-Terraform-Test" {
-  name     = "CM-Terraform-Test"
-  location = "West Europe"
+#ResourceGroup
+
+resource "azurerm_resource_group" "Master-QA" {
+  name     = "CM-TRRA-QA-MASTER-RG1"
+  location = "North Central US"
 }
 
-resource "azurerm_application_insights" "Ap" {
-  name                = "tf-test-appinsights"
-  location            = "West Europe"
-  resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
+#AppInsight
+
+resource "azurerm_application_insights" "Master-QA-AppInsight" {
+  name                = "CM-TRRA-QA-Master-APP-INSIGHTS"
+  location            = "North Central US"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
   application_type    = "web"
 }
 
-output "instrumentation_key" {
-  value = "${azurerm_application_insights.Ap.instrumentation_key}"
-}
+#Storage
 
-output "app_id" {
-  value = "${azurerm_application_insights.Ap.app_id}"
-}
-
-#AppServicePlan
-
-resource "azurerm_app_service_plan" "ASP" {
-  name                = "api-appserviceplan-procmsds"
-  location            = azurerm_resource_group.CM-Terraform-Test.location
-  resource_group_name = azurerm_resource_group.CM-Terraform-Test.name
-
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
-}
-
-#StorageAcccoun
-
-resource "azurerm_storage_account" "Storage" {
-  name                     = "cmtrstorageaccqwcx"
-  resource_group_name      = "${azurerm_resource_group.CM-Terraform-Test.name}"
-  location                 = "${azurerm_resource_group.CM-Terraform-Test.location}"
+resource "azurerm_storage_account" "Master-Qa-Storage" {
+  name                     = "cmtrrarmasterqa"
+  resource_group_name      = "${azurerm_resource_group.Master-QA.name}"
+  location                 = "${azurerm_resource_group.Master-QA.location}"
   account_tier             = "Standard"
   account_replication_type = "GRS"
 
@@ -45,67 +28,14 @@ resource "azurerm_storage_account" "Storage" {
   }
 }
 
-#WebAPP
+#Redis Cache
 
-resource "azurerm_app_service" "webApp" {
-  name                = "CM-Tf-test-webapp"
-  location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
-  resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
-  app_service_plan_id = "${azurerm_app_service_plan.ASP.id}"
 
-  site_config {
-    dotnet_framework_version = "v4.0"
-    scm_type                 = "LocalGit"
-  }
-
-  app_settings = {
-    "SOME_KEY" = "some-value"
-  }
-
-  connection_string {
-    name  = "Database"
-    type  = "SQLServer"
-    value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
-  }
-}
-
-#FunctionAPP
-
-resource "azurerm_function_app" "example" {
-  name                      = "CM-tf-test-azure-functions"
-  location                  = "${azurerm_resource_group.CM-Terraform-Test.location}"
-  resource_group_name       = "${azurerm_resource_group.CM-Terraform-Test.name}"
-  app_service_plan_id       = "${azurerm_app_service_plan.ASP.id}"
-  storage_connection_string = "${azurerm_storage_account.Storage.primary_connection_string}"
-}
-
-#KeyVault
-
-resource "azurerm_key_vault" "KeyVault" {
-  name                        = "Cm-tf-test-testvault"
-  location                    = "${azurerm_resource_group.CM-Terraform-Test.location}"
-  resource_group_name         = "${azurerm_resource_group.CM-Terraform-Test.name}"
-  enabled_for_disk_encryption = true
-  tenant_id                   = "0ae78c52-da35-4145-af80-af727883a5d1"
-
-  sku_name = "standard"
-  
-  network_acls {
-    default_action = "Deny"
-    bypass         = "AzureServices"
-  }
-
-  tags = {
-    environment = "Production"
-  }
-}
-
-#RedisCache
-
-resource "azurerm_redis_cache" "RedisCache" {
-  name                = "CM-TF-Test-Rediscache"
-  location            = "${azurerm_resource_group.CM-Terraform-Test.location}"
-  resource_group_name = "${azurerm_resource_group.CM-Terraform-Test.name}"
+# NOTE: the Name used for Redis needs to be globally unique
+resource "azurerm_redis_cache" "Master-QA-Redis" {
+  name                = "CM-TRRA-QA-Master-RDS"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
   capacity            = 2
   family              = "C"
   sku_name            = "Standard"
@@ -113,4 +43,45 @@ resource "azurerm_redis_cache" "RedisCache" {
   minimum_tls_version = "1.2"
 
   redis_configuration {}
+}
+
+#AppServicePlan
+
+resource "azurerm_app_service_plan" "Master-QA-ASP" {
+  name                = "CM-TRRA-QA-Master-Portal-ASP"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
+
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
+}
+
+#WebAppPortal
+
+resource "azurerm_app_service" "Master-QA-WebPortal" {
+  name                = "CM-TRRA-QA-Master-Portal"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.Master-QA-ASP.id}"
+
+  site_config {
+    dotnet_framework_version = "v4.0"
+    scm_type                 = "LocalGit"
+  }
+}
+
+#WebAppAPI
+
+resource "azurerm_app_service" "Master-QA-WebAPI" {
+  name                = "CM-TRRA-QA-Master-API"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.Master-QA-ASP.id}"
+
+  site_config {
+    dotnet_framework_version = "v4.0"
+    scm_type                 = "LocalGit"
+  }
 }
