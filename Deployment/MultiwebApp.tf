@@ -1,12 +1,15 @@
-#AppServicePlan
+#ResourceGroup
 
-resource "azurerm_app_service_plan" "CRTM-Test" {
-  name                = "CRTM-Shell-Portal-ASP-SNCUS"
-  location            = "${Test.location}"
-  resource_group_name = "${Test.name}"
+resource "azurerm_resource_group" "Master-QA" {
+  name     = "CM-TRRA-QA-Master-RGasadsd"
+  location = "North Central US"
+}
 
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+#AppInsight
+
+resource "azurerm_application_insights" "Master-QA-AppInsight" {
+  name                = "CM-TRRA-QA-Master-APP-INSIGHTSasweqwesds"
+  location            = "North Central US"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
+  application_type    = "web"
 }
