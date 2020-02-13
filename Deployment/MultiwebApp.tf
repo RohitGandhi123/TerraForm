@@ -1,3 +1,9 @@
+#ResourceGroup
+
+resource "azurerm_resource_group" "Master-QA" {
+  name     = "CM-TRRA-QA-Master-RG"
+  location = "North Central US"
+}
 #AppServicePlan
 
 resource "azurerm_app_service_plan" "Master-QA-ASP" {
