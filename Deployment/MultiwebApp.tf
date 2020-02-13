@@ -1,25 +1,26 @@
 #AppServicePlan
 
-resource "azurerm_app_service_plan" "CRTM-SHELL-ASP" {
-  name                = "CRTM-Shell-Portal-ASP-SNCUS"
-  location            = "North Central US"
-  resource_group_name = "CM-TRRA-QA-Master-RGasadsd"
+resource "azurerm_app_service_plan" "Master-QA-ASP" {
+  name                = "CM-TRRA-QA-Master-Portala-ASPa"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
 
   sku {
-    tier = "Premium"
-    size = "P1V2"
+    tier = "Standard"
+    size = "S1"
   }
 }
 
 #WebAppPortal
 
-resource "azurerm_app_service" "CRTM-SHELL-PORTAL" {
-  name                = "CRTM-Shell-Portal-SNCUS"
-  location            = "North Central US"
-  resource_group_name = "CRTM-Shell-App-SNCUS-RG"
-  app_service_plan_id = "${azurerm_app_service_plan.CRTM-SHELL-ASP.id}"
+resource "azurerm_app_service" "Master-QA-WebPortal" {
+  name                = "CM-TRRA-QA-Mastera-Portala"
+  location            = "${azurerm_resource_group.Master-QA.location}"
+  resource_group_name = "${azurerm_resource_group.Master-QA.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.Master-QA-ASP.id}"
 
   site_config {
     dotnet_framework_version = "v4.0"
+    scm_type                 = "LocalGit"
   }
 }
