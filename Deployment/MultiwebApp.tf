@@ -1,8 +1,12 @@
-#AppInsight
+#AppServicePlan
 
-resource "azurerm_application_insights" "Master-QA-AppInsight" {
-  name                = "CM-TRRA-QA-Master-APP-INSIGHTSasweqwesdsasas"
+resource "azurerm_app_service_plan" "CRTM-SHELL-ASP" {
+  name                = "CRTM-Shell-Portal-ASPAS-SNCUS"
   location            = "North Central US"
-  resource_group_name = "CM-TRRA-QA-Master-RGasadsd"
-  application_type    = "web"
+  resource_group_name = "Test"
+
+  sku {
+    tier = "Premium"
+    size = "P1V2"
+  }
 }
