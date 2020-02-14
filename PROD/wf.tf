@@ -1,3 +1,6 @@
+
+
+
 resource "azurerm_app_service_plan" "example" {
   name                = "CRTM-OTS-Portal-ASP-SSCUS"
   location            =  South Central US
@@ -19,6 +22,7 @@ resource "azurerm_app_service" "example_sd" {
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
   }
+}
 
 resource "azurerm_app_service" "example_ad" {
   name                = "CRTM-OTS-API-SSCUS"
@@ -30,3 +34,4 @@ resource "azurerm_app_service" "example_ad" {
     dotnet_framework_version = "v4.0"
     scm_type                 = "LocalGit"
   }
+ }
