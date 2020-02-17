@@ -1,27 +1,21 @@
-resource "azurerm_storage_account" "CRTM-OTS-STORAGE" {
-  name                     = "crtmotsfuncsscus"
-  resource_group_name      = "CRTM-OTS-App-SSCUS-RG"
-  location                 = "South Central US"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+#ApplicationInsight
+
+resource "azurerm_application_insights" "CCM-AppInsight" {
+  name                = "CM-TRRA-CCM-QA-INST"
+  location            = "North Central US"
+  resource_group_name = "CM-TRRA-QA-CCM-RG"
+  application_type    = "web"
 }
 
-resource "azurerm_app_service_plan" "CRTM-OTS-FUNC-ASP" {
-  name                = "CRTM-OTS-Func-APP-ASP-SSCUS"
-  location            = "South Central US"
-  resource_group_name = "CRTM-OTS-App-SSCUS-RG"
-  kind                = "FunctionApp"
+#AppServicePlan
+
+resource "azurerm_app_service_plan" "CCM-QA-ASP" {
+  name                = "CM-TRRA-QA-CCM-Portal-ASP"
+  location            = "North Central US"
+  resource_group_name = "CM-TRRA-QA-CCM-RG"
 
   sku {
-    tier = "Dynamic"
-    size = "Y1"
+    tier = "Premuim"
+    size = "S1"
   }
-}
-
-resource "azurerm_function_app" "CRTM-OTS-FUNC-APP" {
-  name                      = "CRTM-OTS-Func-APP-SSCUS"
-  location                  = "South Central US"
-  resource_group_name       = "CRTM-OTS-App-SSCUS-RG"
-  app_service_plan_id       = azurerm_app_service_plan.CRTM-OTS-FUNC-ASP.id
-  storage_connection_string = azurerm_storage_account.CRTM-OTS-STORAGE.primary_connection_string
 }
